@@ -43,7 +43,6 @@ export function UploadView({ onFileSelect, arsToUsdRate, setArsToUsdRate, isLoad
       <div className="w-full max-w-md">
         {/* Wordmark */}
         <div className="text-center mb-8">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Balanz</p>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Portfolio Report</h1>
           <p className="text-sm text-slate-500 mt-2">
             Subí tu historial de operaciones para visualizar tu cartera

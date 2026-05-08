@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Position } from "../types";
 import { DollarSign, Banknote } from "lucide-react";
+import { CurrencyToggle } from "./charts/CurrencyToggle";
 
 interface PositionsTableProps {
   positions: Position[];
@@ -69,46 +70,6 @@ export function PositionsTable({ positions, arsToUsdRate }: PositionsTableProps)
           </tbody>
         </table>
       </div>
-    </div>
-  );
-}
-
-function CurrencyToggle({
-  currency,
-  onChange,
-  disabled,
-}: {
-  currency: 'USD' | 'ARS';
-  onChange: (c: 'USD' | 'ARS') => void;
-  disabled: boolean;
-}) {
-  return (
-    <div
-      className={`flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 bg-slate-50 ${disabled ? 'opacity-40 pointer-events-none' : ''}`}
-      title={disabled ? 'Ingresá el tipo de cambio para ver valores en ARS' : undefined}
-    >
-      <button
-        onClick={() => onChange('USD')}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-          currency === 'USD'
-            ? 'bg-white text-slate-800 shadow-sm'
-            : 'text-slate-400 hover:text-slate-600'
-        }`}
-      >
-        <DollarSign size={12} />
-        USD
-      </button>
-      <button
-        onClick={() => onChange('ARS')}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-          currency === 'ARS'
-            ? 'bg-white text-slate-800 shadow-sm'
-            : 'text-slate-400 hover:text-slate-600'
-        }`}
-      >
-        <Banknote size={12} />
-        ARS
-      </button>
     </div>
   );
 }
