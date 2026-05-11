@@ -5,9 +5,8 @@ import { Position } from "../types";
 import { PortfolioDistribution } from "./charts/PortfolioDistribution";
 import { SectorDistribution } from "./charts/SectorDistribution";
 import { PositionsTable } from "./PositionsTable";
-import { TrendingUp, LayoutGrid, ChevronLeft } from "lucide-react";
 import { KPICard } from "./charts/KPICard";
-import { KPIContainer } from "./charts/KPIContainer";
+import { NavBar } from "./NavBar";
 
 interface DashboardProps {
   positions: Position[];
@@ -20,43 +19,38 @@ export function Dashboard({ positions, arsToUsdRate, onReset }: DashboardProps) 
     return positions.reduce((sum, pos) => sum + pos.investedValueUSD, 0);
   }, [positions]);
 
+  const currentTotalValueUSD = useMemo(() => {
+    return positions.reduce((sum, pos) => sum + (pos.currentValueUSD || pos.investedValueUSD), 0);
+  }, [positions]);
+
+  const totalPnlAbsolute = currentTotalValueUSD - totalInvestedUSD;
+  const totalPnlPercentage = totalInvestedUSD > 0 ? (totalPnlAbsolute / totalInvestedUSD) * 100 : 0;
+
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
-            Costo histórico consolidado
-            {arsToUsdRate ? (
-              <span className="ml-1.5 inline-flex items-center px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-mono font-medium">
-                TC: ${arsToUsdRate.toLocaleString('es-AR')}
-              </span>
-            ) : (
-              <span className="ml-1.5 text-slate-400">· sólo activos en USD</span>
-            )}
-          </p>
-        </div>
-        <button
-          onClick={onReset}
-          className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors font-medium text-sm"
-        >
-          <ChevronLeft size={15} />
-          Subir otro archivo
-        </button>
-      </div>
+      <NavBar arsToUsdRate={arsToUsdRate} onReset={onReset} />
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         <KPICard
           title="Total Invertido"
-          value={`USD ${totalInvestedUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-          icon={<TrendingUp size={20} strokeWidth={2} />}
+          value={`US$ ${totalInvestedUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        />
+        <KPICard
+          title="Valor Actual"
+          value={`US$ ${currentTotalValueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          badge={`${totalPnlPercentage >= 0 ? '+' : ''}${totalPnlPercentage.toFixed(2)}%`}
+          badgeColor={totalPnlAbsolute >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}
+        />
+        <KPICard
+          title="P&L Global"
+          value={`${totalPnlAbsolute >= 0 ? '+' : '-'}US$ ${Math.abs(totalPnlAbsolute).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          valueColor={totalPnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600'}
         />
         <KPICard
           title="Posiciones Abiertas"
           value={positions.length.toString()}
-          icon={<LayoutGrid size={20} strokeWidth={2} />}
         />
       </div>
 
