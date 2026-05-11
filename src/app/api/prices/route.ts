@@ -19,11 +19,11 @@ export async function POST(request: Request) {
         try {
           const queryTicker = ticker.includes('.') ? ticker : `${ticker}.BA`;
           const quote = await yahooFinance.quote(queryTicker);
-          
+
           if (quote && quote.regularMarketPrice && quote.currency) {
             pricesMap[ticker] = {
               price: quote.regularMarketPrice,
-              currency: quote.currency
+              currency: quote.currency,
             };
           }
         } catch (err: any) {

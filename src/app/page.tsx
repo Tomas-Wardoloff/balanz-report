@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { UploadView } from "../components/UploadView";
-import { Dashboard } from "../components/Dashboard";
-import { parseExcelFile } from "../utils/parser";
-import { calculatePositions } from "../utils/calculator";
-import { Position } from "../types";
-import { fetchDolarRate, fetchCurrentPrices } from "../utils/api";
+import { useState } from 'react';
+import { UploadView } from '../components/UploadView';
+import { Dashboard } from '../components/Dashboard';
+import { parseExcelFile } from '../utils/parser';
+import { calculatePositions } from '../utils/calculator';
+import { Position } from '../types';
+import { fetchDolarRate, fetchCurrentPrices } from '../utils/api';
 
 export default function Home() {
   const [arsToUsdRate, setArsToUsdRate] = useState<number>(0);
@@ -19,40 +19,38 @@ export default function Home() {
     try {
       setIsLoading(true);
 
-      const [orders, fetchedRate] = await Promise.all([
-        parseExcelFile(file),
-        fetchDolarRate()
-      ]);
+      const [orders, fetchedRate] = await Promise.all([parseExcelFile(file), fetchDolarRate()]);
 
       setArsToUsdRate(fetchedRate);
       const calculatedPositions = calculatePositions(orders, fetchedRate);
-      
-      const tickers = calculatedPositions.map(p => p.ticker);
+
+      const tickers = calculatedPositions.map((p) => p.ticker);
       const pricesMap = await fetchCurrentPrices(tickers);
-      
-      const enrichedPositions = calculatedPositions.map(pos => {
+
+      const enrichedPositions = calculatedPositions.map((pos) => {
         const quote = pricesMap[pos.ticker];
         if (!quote) return pos;
 
         const currentPriceUSD = quote.currency === 'ARS' ? quote.price / fetchedRate : quote.price;
         const currentValueUSD = pos.quantity * currentPriceUSD;
         const pnlAbsolute = currentValueUSD - pos.investedValueUSD;
-        const pnlPercentage = pos.investedValueUSD > 0 ? (pnlAbsolute / pos.investedValueUSD) * 100 : 0;
+        const pnlPercentage =
+          pos.investedValueUSD > 0 ? (pnlAbsolute / pos.investedValueUSD) * 100 : 0;
 
         return {
           ...pos,
           currentPriceUSD,
           currentValueUSD,
           pnlAbsolute,
-          pnlPercentage
+          pnlPercentage,
         };
       });
 
       setPositions(enrichedPositions);
       setIsDashboard(true);
     } catch (err) {
-      console.error("Error al procesar el archivo o la API:", err);
-      setError("Hubo un error al procesar el archivo o al obtener la cotización del Dólar MEP.");
+      console.error('Error al procesar el archivo o la API:', err);
+      setError('Hubo un error al procesar el archivo o al obtener la cotización del Dólar MEP.');
     } finally {
       setIsLoading(false);
     }
@@ -73,11 +71,7 @@ export default function Home() {
           onErrorClear={() => setError(null)}
         />
       ) : (
-        <Dashboard
-          positions={positions}
-          arsToUsdRate={arsToUsdRate}
-          onReset={handleReset}
-        />
+        <Dashboard positions={positions} arsToUsdRate={arsToUsdRate} onReset={handleReset} />
       )}
     </main>
   );

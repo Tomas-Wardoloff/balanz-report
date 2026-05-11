@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Position } from '../../types';
 import { UNKNOWN_SECTOR } from '../../constants/sectors';
@@ -22,7 +22,7 @@ export function SectorDistribution({ positions, arsToUsdRate }: SectorDistributi
   const data = useMemo(() => {
     const sectorMap = new Map<string, number>();
 
-    positions.forEach(pos => {
+    positions.forEach((pos) => {
       const val = currency === 'USD' ? pos.investedValueUSD : pos.investedValueUSD * arsToUsdRate;
       const currentVal = sectorMap.get(pos.sector) || 0;
       sectorMap.set(pos.sector, currentVal + val);
@@ -40,7 +40,7 @@ export function SectorDistribution({ positions, arsToUsdRate }: SectorDistributi
   const totalValue = useMemo(() => data.reduce((sum, item) => sum + item.value, 0), [data]);
 
   const unknownTickers = useMemo(() => {
-    return positions.filter(p => p.sector === UNKNOWN_SECTOR).map(p => p.ticker);
+    return positions.filter((p) => p.sector === UNKNOWN_SECTOR).map((p) => p.ticker);
   }, [positions]);
 
   return (
@@ -54,29 +54,27 @@ export function SectorDistribution({ positions, arsToUsdRate }: SectorDistributi
       <div className="flex-1 min-h-[300px]">
         {!isMounted ? null : (
           <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={65}
-              outerRadius={105}
-              paddingAngle={2}
-              dataKey="value"
-              strokeWidth={0}
-            />
-            <Tooltip content={<CustomTooltip totalValue={totalValue} currency={currency} />} />
-            <Legend
-              verticalAlign="bottom"
-              height={40}
-              iconType="circle"
-              iconSize={8}
-              formatter={(value) => (
-                <span className="text-xs text-slate-600">{value}</span>
-              )}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={65}
+                outerRadius={105}
+                paddingAngle={2}
+                dataKey="value"
+                strokeWidth={0}
+              />
+              <Tooltip content={<CustomTooltip totalValue={totalValue} />} />
+              <Legend
+                verticalAlign="bottom"
+                height={40}
+                iconType="circle"
+                iconSize={8}
+                formatter={(value) => <span className="text-xs text-slate-600">{value}</span>}
+              />
+            </PieChart>
+          </ResponsiveContainer>
         )}
       </div>
 
@@ -92,4 +90,3 @@ export function SectorDistribution({ positions, arsToUsdRate }: SectorDistributi
     </div>
   );
 }
-

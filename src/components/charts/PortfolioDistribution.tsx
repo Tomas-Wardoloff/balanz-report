@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -19,9 +19,7 @@ export function PortfolioDistribution({ positions, arsToUsdRate }: PortfolioDist
 
   const data = positions.map((pos, index) => ({
     name: pos.ticker,
-    value: currency === 'USD'
-      ? pos.investedValueUSD
-      : pos.investedValueUSD * arsToUsdRate,
+    value: currency === 'USD' ? pos.investedValueUSD : pos.investedValueUSD * arsToUsdRate,
     fill: COLORS[index % COLORS.length],
   }));
 
@@ -55,9 +53,7 @@ export function PortfolioDistribution({ positions, arsToUsdRate }: PortfolioDist
                 height={40}
                 iconType="circle"
                 iconSize={8}
-                formatter={(value) => (
-                  <span className="text-xs text-slate-600">{value}</span>
-                )}
+                formatter={(value) => <span className="text-xs text-slate-600">{value}</span>}
               />
             </PieChart>
           </ResponsiveContainer>

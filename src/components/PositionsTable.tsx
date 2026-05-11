@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Position } from "../types";
-import { CurrencyToggle } from "./charts/CurrencyToggle";
+import { useState, useEffect } from 'react';
+import { Position } from '../types';
+import { CurrencyToggle } from './charts/CurrencyToggle';
 import {
   DndContext,
   closestCenter,
@@ -26,21 +26,24 @@ interface PositionsTableProps {
   arsToUsdRate: number;
 }
 
-function SortableRow({ pos, formatPrice, isLast }: { pos: Position, formatPrice: (v: number, decimals?: number) => string, isLast: boolean }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: pos.ticker });
+function SortableRow({
+  pos,
+  formatPrice,
+  isLast,
+}: {
+  pos: Position;
+  formatPrice: (v: number, decimals?: number) => string;
+  isLast: boolean;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: pos.ticker,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 10 : 1,
-    position: isDragging ? 'relative' as const : undefined,
+    position: isDragging ? ('relative' as const) : undefined,
   };
 
   return (
@@ -55,7 +58,16 @@ function SortableRow({ pos, formatPrice, isLast }: { pos: Position, formatPrice:
           {...listeners}
           className="text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing p-1"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <line x1="8" y1="6" x2="21" y2="6"></line>
             <line x1="8" y1="12" x2="21" y2="12"></line>
             <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -80,15 +92,24 @@ function SortableRow({ pos, formatPrice, isLast }: { pos: Position, formatPrice:
       <td className="px-6 py-4 text-right font-mono text-sm font-semibold text-slate-800">
         {pos.currentValueUSD !== undefined ? formatPrice(pos.currentValueUSD, 2) : '-'}
       </td>
-      <td className={`px-6 py-4 text-right font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}>
-        {pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? '+' : '') + formatPrice(pos.pnlAbsolute, 2) : '-'}
+      <td
+        className={`px-6 py-4 text-right font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
+      >
+        {pos.pnlAbsolute !== undefined
+          ? (pos.pnlAbsolute >= 0 ? '+' : '') + formatPrice(pos.pnlAbsolute, 2)
+          : '-'}
       </td>
       <td className="px-6 py-4 text-right">
         {pos.pnlPercentage !== undefined ? (
-          <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${pos.pnlPercentage >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-            {pos.pnlPercentage > 0 ? '+' : ''}{pos.pnlPercentage.toFixed(2)}%
+          <span
+            className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${pos.pnlPercentage >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}
+          >
+            {pos.pnlPercentage > 0 ? '+' : ''}
+            {pos.pnlPercentage.toFixed(2)}%
           </span>
-        ) : '-'}
+        ) : (
+          '-'
+        )}
       </td>
     </tr>
   );
@@ -143,27 +164,35 @@ export function PositionsTable({ positions, arsToUsdRate }: PositionsTableProps)
         <CurrencyToggle currency={currency} onChange={setCurrency} disabled={!arsToUsdRate} />
       </div>
       <div>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 text-slate-400 text-xs uppercase tracking-widest">
                 <th className="px-3 py-3 w-10 border-b border-slate-100"></th>
                 <th className="px-6 py-3 font-semibold border-b border-slate-100">Ticker</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">Cantidad</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">Precio Actual</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">Costo Total</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">Valor Actual</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">P&L</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">Variación</th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                  Cantidad
+                </th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                  Precio Actual
+                </th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                  Costo Total
+                </th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                  Valor Actual
+                </th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                  P&L
+                </th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                  Variación
+                </th>
               </tr>
             </thead>
             <tbody>
               <SortableContext
-                items={localPositions.map(p => p.ticker)}
+                items={localPositions.map((p) => p.ticker)}
                 strategy={verticalListSortingStrategy}
               >
                 {localPositions.map((pos, idx) => (

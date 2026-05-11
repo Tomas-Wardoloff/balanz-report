@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { Position } from "../types";
-import { PortfolioDistribution } from "./charts/PortfolioDistribution";
-import { SectorDistribution } from "./charts/SectorDistribution";
-import { PositionsTable } from "./PositionsTable";
-import { KPICard } from "./charts/KPICard";
-import { NavBar } from "./NavBar";
+import { useMemo } from 'react';
+import { Position } from '../types';
+import { PortfolioDistribution } from './charts/PortfolioDistribution';
+import { SectorDistribution } from './charts/SectorDistribution';
+import { PositionsTable } from './PositionsTable';
+import { KPICard } from './charts/KPICard';
+import { NavBar } from './NavBar';
 
 interface DashboardProps {
   positions: Position[];
@@ -41,17 +41,16 @@ export function Dashboard({ positions, arsToUsdRate, onReset }: DashboardProps) 
           title="Valor Actual"
           value={`US$ ${currentTotalValueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           badge={`${totalPnlPercentage >= 0 ? '+' : ''}${totalPnlPercentage.toFixed(2)}%`}
-          badgeColor={totalPnlAbsolute >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}
+          badgeColor={
+            totalPnlAbsolute >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+          }
         />
         <KPICard
           title="P&L Global"
           value={`${totalPnlAbsolute >= 0 ? '+' : '-'}US$ ${Math.abs(totalPnlAbsolute).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           valueColor={totalPnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600'}
         />
-        <KPICard
-          title="Posiciones Abiertas"
-          value={positions.length.toString()}
-        />
+        <KPICard title="Posiciones Abiertas" value={positions.length.toString()} />
       </div>
 
       {/* Charts */}

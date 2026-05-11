@@ -1,23 +1,23 @@
 export async function fetchDolarRate(): Promise<number> {
   try {
-    const response = await fetch("https://dolarapi.com/v1/dolares/bolsa");
+    const response = await fetch('https://dolarapi.com/v1/dolares/bolsa');
     if (!response.ok) {
-      throw new Error(
-        `Error en la API: ${response.status} ${response.statusText}`,
-      );
+      throw new Error(`Error en la API: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
 
     return data.venta;
   } catch (error) {
-    console.error("Error obteniendo Dólar MEP:", error);
+    console.error('Error obteniendo Dólar MEP:', error);
     throw error;
   }
 }
 
-export async function fetchCurrentPrices(tickers: string[]): Promise<Record<string, { price: number; currency: string }>> {
+export async function fetchCurrentPrices(
+  tickers: string[]
+): Promise<Record<string, { price: number; currency: string }>> {
   if (!tickers || tickers.length === 0) return {};
-  
+
   try {
     const response = await fetch('/api/prices', {
       method: 'POST',

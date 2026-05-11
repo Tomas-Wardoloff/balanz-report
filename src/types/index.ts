@@ -1,6 +1,6 @@
 export interface RawOrder {
   Especie: string;
-  "Num Boleto": string | number;
+  'Num Boleto': string | number;
   Ticker: string;
   Tipo: string;
   Concertacion: string;
@@ -8,7 +8,7 @@ export interface RawOrder {
   Cantidad: number;
   Precio: number | string;
   Bruto: number | string;
-  "Costos Mercado": number | string;
+  'Costos Mercado': number | string;
   Arancel: number | string;
   Neto: number | string;
   Moneda: string;

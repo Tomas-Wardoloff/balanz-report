@@ -16,9 +16,7 @@ export function CurrencyToggle({ currency, onChange, disabled }: CurrencyToggleP
       <button
         onClick={() => onChange('USD')}
         className={`cursor-pointer flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all ${
-          currency === 'USD'
-            ? 'text-slate-900'
-            : 'text-slate-400 hover:text-slate-600'
+          currency === 'USD' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
         }`}
       >
         <DollarSign size={12} />
@@ -27,9 +25,7 @@ export function CurrencyToggle({ currency, onChange, disabled }: CurrencyToggleP
       <button
         onClick={() => onChange('ARS')}
         className={`cursor-pointer flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all ${
-          currency === 'ARS'
-            ? 'text-slate-900'
-            : 'text-slate-400 hover:text-slate-600'
+          currency === 'ARS' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
         }`}
       >
         <Banknote size={12} />
