@@ -1,5 +1,5 @@
 import { ChevronLeft } from 'lucide-react';
-import { CurrencyToggle } from './charts/CurrencyToggle';
+import { CurrencyToggle } from '@/components/charts/CurrencyToggle';
 
 interface NavBarProps {
   arsToUsdRate: number;

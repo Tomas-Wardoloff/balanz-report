@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatedCurrency } from './AnimatedCurrency';
-import { Position } from '../types';
+import { Position } from '@/types';
 import {
   DndContext,
   closestCenter,
@@ -88,20 +88,34 @@ function SortableRow({
         {pos.quantity.toLocaleString('es-AR')}
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
-        {pos.currentPriceUSD ? <AnimatedCurrency value={pos.currentPriceUSD * targetMultiplier} currency={currency} /> : '-'}
+        {pos.currentPriceUSD ? (
+          <AnimatedCurrency value={pos.currentPriceUSD * targetMultiplier} currency={currency} />
+        ) : (
+          '-'
+        )}
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
         <AnimatedCurrency value={pos.investedValueUSD * targetMultiplier} currency={currency} />
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
-        {pos.currentValueUSD !== undefined ? <AnimatedCurrency value={pos.currentValueUSD * targetMultiplier} currency={currency} /> : '-'}
+        {pos.currentValueUSD !== undefined ? (
+          <AnimatedCurrency value={pos.currentValueUSD * targetMultiplier} currency={currency} />
+        ) : (
+          '-'
+        )}
       </td>
       <td
         className={`px-6 py-4 text-center font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
       >
-        {pos.pnlAbsolute !== undefined
-          ? <AnimatedCurrency value={pos.pnlAbsolute * targetMultiplier} currency={currency} showSign />
-          : '-'}
+        {pos.pnlAbsolute !== undefined ? (
+          <AnimatedCurrency
+            value={pos.pnlAbsolute * targetMultiplier}
+            currency={currency}
+            showSign
+          />
+        ) : (
+          '-'
+        )}
       </td>
       <td className="px-6 py-4 text-center">
         {pos.pnlPercentage !== undefined ? (

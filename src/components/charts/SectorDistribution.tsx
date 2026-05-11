@@ -2,11 +2,11 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Position } from '../../types';
-import { UNKNOWN_SECTOR } from '../../constants/sectors';
+import { Position } from '@/types';
+import { UNKNOWN_SECTOR } from '@/constants/sectors';
 import { AlertCircle } from 'lucide-react';
-import { CustomTooltip } from './CustomTooltip';
-import { COLORS } from '../../constants/colors';
+import { CustomTooltip } from '@/components/charts/CustomTooltip';
+import { COLORS } from '@/constants/colors';
 
 interface SectorDistributionProps {
   positions: Position[];

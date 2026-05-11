@@ -1,13 +1,13 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { AnimatedCurrency } from './AnimatedCurrency';
-import { Position } from '../types';
-import { PortfolioDistribution } from './charts/PortfolioDistribution';
-import { SectorDistribution } from './charts/SectorDistribution';
-import { PositionsTable } from './PositionsTable';
-import { KPICard } from './charts/KPICard';
-import { NavBar } from './NavBar';
+import { AnimatedCurrency } from '@/components/AnimatedCurrency';
+import { Position } from '@/types';
+import { PortfolioDistribution } from '@/components/charts/PortfolioDistribution';
+import { SectorDistribution } from '@/components/charts/SectorDistribution';
+import { PositionsTable } from '@/components/PositionsTable';
+import { KPICard } from '@/components/charts/KPICard';
+import { NavBar } from '@/components/NavBar';
 
 interface DashboardProps {
   positions: Position[];

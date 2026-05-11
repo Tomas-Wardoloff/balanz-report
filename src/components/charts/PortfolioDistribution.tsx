@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Position } from '../../types';
-import { CustomTooltip } from './CustomTooltip';
-import { COLORS } from '../../constants/colors';
+import { Position } from '@/types';
+import { CustomTooltip } from '@/components/charts/CustomTooltip';
+import { COLORS } from '@/constants/colors';
 
 interface PortfolioDistributionProps {
   positions: Position[];

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { UploadView } from '../components/UploadView';
-import { Dashboard } from '../components/Dashboard';
-import { parseExcelFile } from '../utils/parser';
-import { calculatePositions } from '../utils/calculator';
-import { Position } from '../types';
-import { fetchDolarRate, fetchCurrentPrices } from '../utils/api';
+import { UploadView } from '@/components/UploadView';
+import { Dashboard } from '@/components/Dashboard';
+import { parseExcelFile } from '@/utils/parser';
+import { calculatePositions } from '@/utils/calculator';
+import { Position } from '@/types';
+import { fetchDolarRate, fetchCurrentPrices } from '@/utils/api';
 
 export default function Home() {
   const [arsToUsdRate, setArsToUsdRate] = useState<number>(0);

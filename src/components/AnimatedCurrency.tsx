@@ -1,6 +1,6 @@
 'use client';
 
-import { useAnimatedNumber } from '../hooks/useAnimatedNumber';
+import { useAnimatedNumber } from '@/hooks/useAnimatedNumber';
 
 interface AnimatedCurrencyProps {
   value: number;
@@ -9,12 +9,17 @@ interface AnimatedCurrencyProps {
   showSign?: boolean;
 }
 
-export function AnimatedCurrency({ value, currency, decimals = 2, showSign = false }: AnimatedCurrencyProps) {
+export function AnimatedCurrency({
+  value,
+  currency,
+  decimals = 2,
+  showSign = false,
+}: AnimatedCurrencyProps) {
   const animatedValue = useAnimatedNumber(value, 400);
 
   const prefix = currency === 'USD' ? 'US$ ' : 'AR$ ';
   const locale = currency === 'USD' ? 'en-US' : 'es-AR';
-  
+
   const formattedNumber = Math.abs(animatedValue).toLocaleString(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
