@@ -1,6 +1,6 @@
 export interface KPICardProps {
   title: string;
-  value: string;
+  value: React.ReactNode;
   icon?: React.ReactNode;
   className?: string;
   valueColor?: string;
@@ -19,7 +19,7 @@ export function KPICard({
 }: KPICardProps) {
   return (
     <div
-      className={`bg-white px-6 py-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 ${className}`}
+      className={`bg-white px-6 py-5 rounded-md shadow-sm border border-slate-200 flex items-center gap-4 ${className}`}
     >
       {icon && <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">{icon}</div>}
       <div className="w-full">

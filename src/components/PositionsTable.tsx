@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { AnimatedCurrency } from './AnimatedCurrency';
 import { Position } from '../types';
 import {
   DndContext,
@@ -28,13 +29,16 @@ interface PositionsTableProps {
 
 function SortableRow({
   pos,
-  formatPrice,
+  currency,
+  arsToUsdRate,
   isLast,
 }: {
   pos: Position;
-  formatPrice: (v: number, decimals?: number) => string;
+  currency: 'USD' | 'ARS';
+  arsToUsdRate: number;
   isLast: boolean;
 }) {
+  const targetMultiplier = currency === 'USD' ? 1 : arsToUsdRate;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: pos.ticker,
   });
@@ -84,19 +88,19 @@ function SortableRow({
         {pos.quantity.toLocaleString('es-AR')}
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
-        {pos.currentPriceUSD ? formatPrice(pos.currentPriceUSD, 2) : '-'}
+        {pos.currentPriceUSD ? <AnimatedCurrency value={pos.currentPriceUSD * targetMultiplier} currency={currency} /> : '-'}
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
-        {formatPrice(pos.investedValueUSD, 2)}
+        <AnimatedCurrency value={pos.investedValueUSD * targetMultiplier} currency={currency} />
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
-        {pos.currentValueUSD !== undefined ? formatPrice(pos.currentValueUSD, 2) : '-'}
+        {pos.currentValueUSD !== undefined ? <AnimatedCurrency value={pos.currentValueUSD * targetMultiplier} currency={currency} /> : '-'}
       </td>
       <td
         className={`px-6 py-4 text-center font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
       >
         {pos.pnlAbsolute !== undefined
-          ? (pos.pnlAbsolute >= 0 ? '+' : '') + formatPrice(pos.pnlAbsolute, 2)
+          ? <AnimatedCurrency value={pos.pnlAbsolute * targetMultiplier} currency={currency} showSign />
           : '-'}
       </td>
       <td className="px-6 py-4 text-center">
@@ -147,13 +151,8 @@ export function PositionsTable({ positions, arsToUsdRate, currency }: PositionsT
 
   if (localPositions.length === 0) return null;
 
-  const formatPrice = (v: number, decimals = 2) =>
-    currency === 'USD'
-      ? `$ ${v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`
-      : `$ ${(v * arsToUsdRate).toLocaleString('es-AR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
-
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
       <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
@@ -167,7 +166,9 @@ export function PositionsTable({ positions, arsToUsdRate, currency }: PositionsT
             <thead>
               <tr className="bg-slate-50 text-slate-400 text-xs uppercase tracking-widest">
                 <th className="px-3 py-3 w-10 border-b border-slate-100"></th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">Ticket</th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
+                  Ticket
+                </th>
                 <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
                   Cant. Nominales
                 </th>
@@ -197,7 +198,8 @@ export function PositionsTable({ positions, arsToUsdRate, currency }: PositionsT
                   <SortableRow
                     key={pos.ticker}
                     pos={pos}
-                    formatPrice={formatPrice}
+                    currency={currency}
+                    arsToUsdRate={arsToUsdRate}
                     isLast={idx === localPositions.length - 1}
                   />
                 ))}

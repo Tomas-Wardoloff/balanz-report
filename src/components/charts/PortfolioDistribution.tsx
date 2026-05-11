@@ -12,7 +12,11 @@ interface PortfolioDistributionProps {
   currency: 'USD' | 'ARS';
 }
 
-export function PortfolioDistribution({ positions, arsToUsdRate, currency }: PortfolioDistributionProps) {
+export function PortfolioDistribution({
+  positions,
+  arsToUsdRate,
+  currency,
+}: PortfolioDistributionProps) {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
 
@@ -25,7 +29,7 @@ export function PortfolioDistribution({ positions, arsToUsdRate, currency }: Por
   const totalValue = React.useMemo(() => data.reduce((sum, item) => sum + item.value, 0), [data]);
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full flex flex-col">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 h-full flex flex-col">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
           Distribución por Ticker

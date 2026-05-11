@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { AnimatedCurrency } from './AnimatedCurrency';
 import { Position } from '../types';
 import { PortfolioDistribution } from './charts/PortfolioDistribution';
 import { SectorDistribution } from './charts/SectorDistribution';
@@ -26,7 +27,6 @@ export function Dashboard({ positions, arsToUsdRate, onReset }: DashboardProps) 
   }, [positions]);
 
   const currencyMultiplier = globalCurrency === 'USD' ? 1 : arsToUsdRate;
-  const currencyPrefix = globalCurrency === 'USD' ? 'US$ ' : 'AR$ ';
 
   const totalInvested = totalInvestedUSD * currencyMultiplier;
   const currentTotalValue = currentTotalValueUSD * currencyMultiplier;
@@ -48,15 +48,15 @@ export function Dashboard({ positions, arsToUsdRate, onReset }: DashboardProps) 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         <KPICard
           title="Total Invertido"
-          value={`${currencyPrefix}${totalInvested.toLocaleString(globalCurrency === 'USD' ? 'en-US' : 'es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          value={<AnimatedCurrency value={totalInvested} currency={globalCurrency} />}
         />
         <KPICard
           title="Valor Actual"
-          value={`${currencyPrefix}${currentTotalValue.toLocaleString(globalCurrency === 'USD' ? 'en-US' : 'es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          value={<AnimatedCurrency value={currentTotalValue} currency={globalCurrency} />}
         />
         <KPICard
           title="P&L Global"
-          value={`${totalPnlAbsolute >= 0 ? '+' : '-'}${currencyPrefix}${Math.abs(totalPnlAbsolute).toLocaleString(globalCurrency === 'USD' ? 'en-US' : 'es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          value={<AnimatedCurrency value={totalPnlAbsolute} currency={globalCurrency} showSign />}
           valueColor={totalPnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600'}
           badge={`${totalPnlPercentage >= 0 ? '+' : ''}${totalPnlPercentage.toFixed(2)}%`}
           badgeColor={
