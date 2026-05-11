@@ -17,7 +17,7 @@ export function NavBar({ arsToUsdRate, onReset, currency, onCurrencyChange }: Na
         <p className="text-sm text-slate-500 mt-0.5">
           {arsToUsdRate ? (
             <span className="ml-1.5 inline-flex items-center px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-mono font-medium">
-              1 USD = ${arsToUsdRate.toLocaleString('es-AR')}
+              1 USD = ${arsToUsdRate.toLocaleString('es-AR')} ARS
             </span>
           ) : (
             <span className="ml-1.5 text-slate-400">· sólo activos en USD</span>
