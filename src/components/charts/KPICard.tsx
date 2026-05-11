@@ -22,12 +22,9 @@ export function KPICard({
       className={`bg-white px-6 py-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 ${className}`}
     >
       {icon && <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">{icon}</div>}
-      <div>
-        <p className="text-xs font-semibold tracking-widest text-slate-400">{title}</p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <p className={`text-2xl font-bold tracking-tight ${valueColor || 'text-slate-900'}`}>
-            {value}
-          </p>
+      <div className="w-full">
+        <div className="flex justify-between gap-2">
+          <p className="text-xs font-semibold tracking-widest text-slate-400">{title}</p>
           {badge && (
             <span
               className={`px-2 py-0.5 text-xs font-medium rounded-md ${badgeColor || 'bg-slate-100 text-slate-600'}`}
@@ -35,6 +32,11 @@ export function KPICard({
               {badge}
             </span>
           )}
+        </div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <p className={`text-2xl font-bold tracking-tight ${valueColor || 'text-slate-900'}`}>
+            {value}
+          </p>
         </div>
       </div>
     </div>
