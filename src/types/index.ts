@@ -20,4 +20,8 @@ export interface Position {
   quantity: number;
   averagePrice: number; // in USD
   investedValueUSD: number;
+  currentPriceUSD?: number;
+  currentValueUSD?: number;
+  pnlAbsolute?: number;
+  pnlPercentage?: number;
 }
