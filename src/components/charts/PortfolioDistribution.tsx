@@ -3,17 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Position } from '../../types';
-import { CurrencyToggle } from './CurrencyToggle';
 import { CustomTooltip } from './CustomTooltip';
 import { COLORS } from '../../constants/colors';
 
 interface PortfolioDistributionProps {
   positions: Position[];
   arsToUsdRate: number;
+  currency: 'USD' | 'ARS';
 }
 
-export function PortfolioDistribution({ positions, arsToUsdRate }: PortfolioDistributionProps) {
-  const [currency, setCurrency] = useState<'USD' | 'ARS'>('USD');
+export function PortfolioDistribution({ positions, arsToUsdRate, currency }: PortfolioDistributionProps) {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
 
@@ -31,7 +30,6 @@ export function PortfolioDistribution({ positions, arsToUsdRate }: PortfolioDist
         <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
           Distribución por Ticker
         </h3>
-        <CurrencyToggle currency={currency} onChange={setCurrency} disabled={!arsToUsdRate} />
       </div>
       <div className="flex-1 min-h-[300px]">
         {!isMounted ? null : (

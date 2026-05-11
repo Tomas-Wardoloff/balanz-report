@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Position } from '../types';
-import { CurrencyToggle } from './charts/CurrencyToggle';
 import {
   DndContext,
   closestCenter,
@@ -24,6 +23,7 @@ import { CSS } from '@dnd-kit/utilities';
 interface PositionsTableProps {
   positions: Position[];
   arsToUsdRate: number;
+  currency: 'USD' | 'ARS';
 }
 
 function SortableRow({
@@ -77,29 +77,29 @@ function SortableRow({
           </svg>
         </button>
       </td>
-      <td className="px-6 py-4 font-semibold text-sm text-slate-800 tracking-tight">
+      <td className="px-6 py-4 text-center font-semibold text-sm text-slate-800 tracking-tight">
         {pos.ticker}
       </td>
-      <td className="px-6 py-4 text-right font-mono text-sm text-slate-600">
+      <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
         {pos.quantity.toLocaleString('es-AR')}
       </td>
-      <td className="px-6 py-4 text-right font-mono text-sm text-slate-600">
+      <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
         {pos.currentPriceUSD ? formatPrice(pos.currentPriceUSD, 2) : '-'}
       </td>
-      <td className="px-6 py-4 text-right font-mono text-sm font-semibold text-slate-800">
+      <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
         {formatPrice(pos.investedValueUSD, 2)}
       </td>
-      <td className="px-6 py-4 text-right font-mono text-sm font-semibold text-slate-800">
+      <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
         {pos.currentValueUSD !== undefined ? formatPrice(pos.currentValueUSD, 2) : '-'}
       </td>
       <td
-        className={`px-6 py-4 text-right font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
+        className={`px-6 py-4 text-center font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
       >
         {pos.pnlAbsolute !== undefined
           ? (pos.pnlAbsolute >= 0 ? '+' : '') + formatPrice(pos.pnlAbsolute, 2)
           : '-'}
       </td>
-      <td className="px-6 py-4 text-right">
+      <td className="px-6 py-4 text-center">
         {pos.pnlPercentage !== undefined ? (
           <span
             className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${pos.pnlPercentage >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}
@@ -115,8 +115,7 @@ function SortableRow({
   );
 }
 
-export function PositionsTable({ positions, arsToUsdRate }: PositionsTableProps) {
-  const [currency, setCurrency] = useState<'USD' | 'ARS'>('USD');
+export function PositionsTable({ positions, arsToUsdRate, currency }: PositionsTableProps) {
   const [localPositions, setLocalPositions] = useState<Position[]>([]);
 
   useEffect(() => {
@@ -161,31 +160,30 @@ export function PositionsTable({ positions, arsToUsdRate }: PositionsTableProps)
             Resumen de Posiciones
           </h3>
         </div>
-        <CurrencyToggle currency={currency} onChange={setCurrency} disabled={!arsToUsdRate} />
       </div>
       <div>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-center border-collapse">
             <thead>
               <tr className="bg-slate-50 text-slate-400 text-xs uppercase tracking-widest">
                 <th className="px-3 py-3 w-10 border-b border-slate-100"></th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100">Ticker</th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
-                  Cantidad
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">Ticket</th>
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
+                  Cant. Nominales
                 </th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
                   Precio Actual
                 </th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
                   Costo Total
                 </th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
                   Valor Actual
                 </th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
                   P&L
                 </th>
-                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-right">
+                <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
                   Variación
                 </th>
               </tr>

@@ -1,6 +1,14 @@
 import { ChevronLeft } from 'lucide-react';
+import { CurrencyToggle } from './charts/CurrencyToggle';
 
-export function NavBar({ arsToUsdRate, onReset }: { arsToUsdRate: number; onReset: () => void }) {
+interface NavBarProps {
+  arsToUsdRate: number;
+  onReset: () => void;
+  currency: 'USD' | 'ARS';
+  onCurrencyChange: (currency: 'USD' | 'ARS') => void;
+}
+
+export function NavBar({ arsToUsdRate, onReset, currency, onCurrencyChange }: NavBarProps) {
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-4">
       <div>
@@ -15,13 +23,17 @@ export function NavBar({ arsToUsdRate, onReset }: { arsToUsdRate: number; onRese
           )}
         </p>
       </div>
-      <button
-        onClick={onReset}
-        className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors font-medium text-sm"
-      >
-        <ChevronLeft size={15} />
-        Subir otro archivo
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={onReset}
+          className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors font-medium text-sm"
+        >
+          <ChevronLeft size={15} />
+          Subir otro archivo
+        </button>
+
+        <CurrencyToggle currency={currency} onChange={onCurrencyChange} disabled={!arsToUsdRate} />
+      </div>
     </div>
   );
 }

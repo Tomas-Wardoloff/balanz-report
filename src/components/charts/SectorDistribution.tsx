@@ -5,17 +5,16 @@ import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Position } from '../../types';
 import { UNKNOWN_SECTOR } from '../../constants/sectors';
 import { AlertCircle } from 'lucide-react';
-import { CurrencyToggle } from './CurrencyToggle';
 import { CustomTooltip } from './CustomTooltip';
 import { COLORS } from '../../constants/colors';
 
 interface SectorDistributionProps {
   positions: Position[];
   arsToUsdRate: number;
+  currency: 'USD' | 'ARS';
 }
 
-export function SectorDistribution({ positions, arsToUsdRate }: SectorDistributionProps) {
-  const [currency, setCurrency] = useState<'USD' | 'ARS'>('USD');
+export function SectorDistribution({ positions, arsToUsdRate, currency }: SectorDistributionProps) {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
 
@@ -49,7 +48,6 @@ export function SectorDistribution({ positions, arsToUsdRate }: SectorDistributi
         <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
           Distribución por Sector
         </h3>
-        <CurrencyToggle currency={currency} onChange={setCurrency} disabled={!arsToUsdRate} />
       </div>
       <div className="flex-1 min-h-[300px]">
         {!isMounted ? null : (
