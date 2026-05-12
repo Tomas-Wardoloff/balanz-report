@@ -10,7 +10,6 @@ export function CurrencyToggle({ currency, onChange, disabled }: CurrencyToggleP
   return (
     <div
       className={`flex items-center gap-0.5 p-0.5 rounded-lg bg-slate-50 ${disabled ? 'opacity-40 pointer-events-none' : ''}`}
-      title={disabled ? 'Ingresá el tipo de cambio para ver valores en ARS' : undefined}
     >
       <button
         onClick={() => onChange('USD')}
