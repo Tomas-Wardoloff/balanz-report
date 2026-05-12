@@ -21,6 +21,8 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import { usePrivacy } from '@/context/PrivacyContext';
+
 interface PositionsTableProps {
   positions: Position[];
   arsToUsdRate: number;
@@ -38,6 +40,7 @@ function SortableRow({
   arsToUsdRate: number;
   isLast: boolean;
 }) {
+  const { isPrivate } = usePrivacy();
   const targetMultiplier = currency === 'USD' ? 1 : arsToUsdRate;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: pos.ticker,
@@ -85,7 +88,7 @@ function SortableRow({
         {pos.ticker}
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
-        {pos.quantity.toLocaleString('es-AR')}
+        {isPrivate ? '***' : pos.quantity.toLocaleString('es-AR')}
       </td>
       <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
         {pos.currentPriceUSD ? (

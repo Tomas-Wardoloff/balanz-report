@@ -1,6 +1,7 @@
 'use client';
 
 import { useAnimatedNumber } from '@/hooks/useAnimatedNumber';
+import { usePrivacy } from '@/context/PrivacyContext';
 
 interface AnimatedCurrencyProps {
   value: number;
@@ -15,9 +16,15 @@ export function AnimatedCurrency({
   decimals = 2,
   showSign = false,
 }: AnimatedCurrencyProps) {
+  const { isPrivate } = usePrivacy();
   const animatedValue = useAnimatedNumber(value, 400);
 
   const prefix = currency === 'USD' ? 'US$ ' : 'AR$ ';
+
+  if (isPrivate) {
+    return <span>{`${prefix}***`}</span>;
+  }
+
   const locale = currency === 'USD' ? 'en-US' : 'es-AR';
 
   const formattedNumber = Math.abs(animatedValue).toLocaleString(locale, {
@@ -28,7 +35,6 @@ export function AnimatedCurrency({
   let sign = '';
   if (showSign) {
     sign = animatedValue >= 0 ? '+' : '';
-    // if negative, formattedNumber already has no sign, we will prepend '-' below for negative values.
     if (animatedValue < 0) sign = '-';
   } else if (animatedValue < 0) {
     sign = '-';

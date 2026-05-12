@@ -1,3 +1,5 @@
+import { usePrivacy } from '@/context/PrivacyContext';
+
 interface CustomTooltipProps {
   active?: boolean;
   payload?: any[];
@@ -5,10 +7,15 @@ interface CustomTooltipProps {
 }
 
 export function CustomTooltip({ active, payload, totalValue }: CustomTooltipProps) {
+  const { isPrivate } = usePrivacy();
+
   if (active && payload && payload.length) {
     const value = payload[0].value;
     const percent = totalValue > 0 ? ((value / totalValue) * 100).toFixed(2) : '0.00';
-    const formattedValue = `$ ${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    const formattedValue = isPrivate
+      ? '***'
+      : `$ ${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
     return (
       <div className="bg-white px-4 py-3 rounded-xl shadow-lg border border-slate-100">
