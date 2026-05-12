@@ -1,5 +1,6 @@
 import { ChevronLeft } from 'lucide-react';
-import { CurrencyToggle } from '@/components/charts/CurrencyToggle';
+import { CurrencyToggle } from '@/components/CurrencyToggle';
+import { PrivacyToggle } from '@/components/PrivacyToggle';
 
 interface NavBarProps {
   arsToUsdRate: number;
@@ -24,6 +25,10 @@ export function NavBar({ arsToUsdRate, onReset, currency, onCurrencyChange }: Na
         </p>
       </div>
       <div className="flex gap-2">
+        <PrivacyToggle />
+
+        <CurrencyToggle currency={currency} onChange={onCurrencyChange} disabled={!arsToUsdRate} />
+
         <button
           onClick={onReset}
           className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors font-medium text-sm"
@@ -31,8 +36,6 @@ export function NavBar({ arsToUsdRate, onReset, currency, onCurrencyChange }: Na
           <ChevronLeft size={15} />
           Subir otro archivo
         </button>
-
-        <CurrencyToggle currency={currency} onChange={onCurrencyChange} disabled={!arsToUsdRate} />
       </div>
     </div>
   );
