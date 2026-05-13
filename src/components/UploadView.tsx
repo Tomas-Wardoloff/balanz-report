@@ -11,7 +11,13 @@ interface UploadViewProps {
   onErrorClear?: () => void;
 }
 
-export function UploadView({ onFileSelect, isLoading, error, onError, onErrorClear }: UploadViewProps) {
+export function UploadView({
+  onFileSelect,
+  isLoading,
+  error,
+  onError,
+  onErrorClear,
+}: UploadViewProps) {
   const [dragActive, setDragActive] = useState(false);
   const [countdown, setCountdown] = useState(4);
 
