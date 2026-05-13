@@ -71,6 +71,7 @@ export default function Home() {
           onFileSelect={handleFileSelect}
           isLoading={isLoading}
           error={error}
+          onError={setError}
           onErrorClear={() => setError(null)}
         />
       ) : (

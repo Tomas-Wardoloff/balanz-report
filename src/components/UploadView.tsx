@@ -7,29 +7,31 @@ interface UploadViewProps {
   onFileSelect: (file: File) => void;
   isLoading: boolean;
   error?: string | null;
+  onError: (msg: string) => void;
   onErrorClear?: () => void;
 }
 
-export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: UploadViewProps) {
+export function UploadView({ onFileSelect, isLoading, error, onError, onErrorClear }: UploadViewProps) {
   const [dragActive, setDragActive] = useState(false);
   const [countdown, setCountdown] = useState(4);
 
   useEffect(() => {
-    if (error) {
-      setCountdown(5);
-      const timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            if (onErrorClear) onErrorClear();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
+    if (!error) return;
+
+    setCountdown(5);
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [error]);
+
+  useEffect(() => {
+    if (error && countdown <= 0) {
+      if (onErrorClear) onErrorClear();
     }
-  }, [error, onErrorClear]);
+  }, [countdown, error, onErrorClear]);
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -48,27 +50,34 @@ export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: Upl
         if (file.name.endsWith('.xlsx')) {
           onFileSelect(file);
         } else {
-          alert('Por favor sube un archivo .xlsx válido.');
+          onError('Por favor sube un archivo .xlsx válido.');
         }
       }
     },
-    [onFileSelect]
+    [onFileSelect, onError]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) onFileSelect(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.name.endsWith('.xlsx')) {
+        onFileSelect(file);
+      } else {
+        onError('Por favor sube un archivo .xlsx válido.');
+      }
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-[#f5f7fa]">
-      <div className="w-full max-w-md">
-        {/* Wordmark */}
+    <div className="flex flex-col items-center justify-center min-h-screen p-8">
+      <div className="w-full max-w-md my-auto">
+        {/* Header Wordmark */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-            Tus inversiones en{' '}
+            Tus inversiones de{' '}
             <span className="text-4xl font-bold text-[#192572] tracking-tight">BALANZ</span>
           </h1>
-          <p className="text-sm text-slate-500 mt-2">De una manera simple</p>
+          <p className="text-sm text-slate-500 mt-2">De una manera más simple</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 flex flex-col gap-7">
@@ -110,7 +119,7 @@ export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: Upl
 
               <div className="flex flex-col items-center gap-3 text-center">
                 <div
-                  className={`p-3 rounded-xl transition-colors ${dragActive ? 'text-emerald-600' : 'text-slate-500'}`}
+                  className={`p-3 rounded-xl transition-colors ${dragActive ? 'text-[#192572]' : 'text-slate-500'}`}
                 >
                   <Upload size={24} />
                 </div>
@@ -126,15 +135,22 @@ export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: Upl
             </div>
           )}
         </div>
+
+        <p className="mt-6 text-center text-[8px] leading-relaxed text-slate-400 font-normal">
+          Esta aplicación es una herramienta independiente de visualización de datos y no se
+          encuentra afiliada, asociada, respaldada ni vinculada formalmente con Balanz Capital S.A.
+          ni con ninguna de sus entidades. Los nombres y marcas comerciales mencionadas pertenecen a
+          sus respectivos titulares.
+        </p>
       </div>
 
-      {/* Footer with GitHub Link */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+      {/* Footer Disclaimer & Link */}
+      <div className="w-full max-w-md text-center flex flex-col items-center gap-5 pt-8">
         <a
           href="https://github.com/Tomas-Wardoloff/balanz-report"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 text-slate-400 hover:text-slate-900 transition-colors duration-200"
+          className="flex items-center gap-2 text-slate-300 hover:text-slate-700 transition-colors duration-200"
           title="Ver repositorio en GitHub"
         >
           <svg
