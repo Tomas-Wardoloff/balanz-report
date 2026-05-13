@@ -1,12 +1,10 @@
 import { RawOrder, Position } from '../types';
 import { SECTOR_MAPPING, UNKNOWN_SECTOR } from '../constants/sectors';
+import { parseOrderDate } from './parser';
 
 export function calculatePositions(orders: RawOrder[], arsToUsdRate: number): Position[] {
-  // Sort orders by date (oldest to newest) to correctly calculate average price
-  // Assuming Concertacion format allows simple string sort or parsing
   const sortedOrders = [...orders].sort((a, b) => {
-    // Simple sort for now, ideally parse DD/MM/YYYY
-    return a.Concertacion.localeCompare(b.Concertacion);
+    return parseOrderDate(a.Concertacion).getTime() - parseOrderDate(b.Concertacion).getTime();
   });
 
   const positionMap = new Map<string, { quantity: number; totalCostUSD: number }>();

@@ -1,6 +1,18 @@
 import * as XLSX from 'xlsx';
 import { RawOrder } from '../types';
 
+export function parseOrderDate(dateVal: string): Date {
+  if (!dateVal) return new Date();
+
+  const dateStr = String(dateVal).trim();
+
+  // Try parsing standard formats (YYYY-MM-DD)
+  const d = new Date(dateStr);
+  if (!isNaN(d.getTime())) return d;
+
+  return new Date();
+}
+
 function parseNumber(value: number | string): number {
   if (typeof value === 'number') return value;
   if (!value) return 0;

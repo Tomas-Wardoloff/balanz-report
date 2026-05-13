@@ -8,15 +8,17 @@ import { SectorDistribution } from '@/components/charts/SectorDistribution';
 import { PositionsTable } from '@/components/PositionsTable';
 import { KPICard } from '@/components/charts/KPICard';
 import { NavBar } from '@/components/NavBar';
+import { EvolutionChart } from '@/components/charts/EvolutionChart';
 import { PrivacyProvider } from '@/context/PrivacyContext';
 
 interface DashboardProps {
   positions: Position[];
+  orders: RawOrder[];
   arsToUsdRate: number;
   onReset: () => void;
 }
 
-export function Dashboard({ positions, arsToUsdRate, onReset }: DashboardProps) {
+export function Dashboard({ positions, orders, arsToUsdRate, onReset }: DashboardProps) {
   const [globalCurrency, setGlobalCurrency] = useState<'USD' | 'ARS'>('USD');
 
   const totalInvestedUSD = useMemo(() => {
@@ -69,6 +71,7 @@ export function Dashboard({ positions, arsToUsdRate, onReset }: DashboardProps) 
         </div>
 
         {/* Charts */}
+        <EvolutionChart orders={orders} arsToUsdRate={arsToUsdRate} currency={globalCurrency} />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <PortfolioDistribution
             positions={positions}

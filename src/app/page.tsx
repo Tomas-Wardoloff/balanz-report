@@ -5,12 +5,13 @@ import { UploadView } from '@/components/UploadView';
 import { Dashboard } from '@/components/Dashboard';
 import { parseExcelFile } from '@/utils/parser';
 import { calculatePositions } from '@/utils/calculator';
-import { Position } from '@/types';
+import { Position, RawOrder } from '@/types';
 import { fetchDolarRate, fetchCurrentPrices } from '@/utils/api';
 
 export default function Home() {
   const [arsToUsdRate, setArsToUsdRate] = useState<number>(0);
   const [positions, setPositions] = useState<Position[]>([]);
+  const [orders, setOrders] = useState<RawOrder[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDashboard, setIsDashboard] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +48,7 @@ export default function Home() {
       });
 
       setPositions(enrichedPositions);
+      setOrders(orders);
       setIsDashboard(true);
     } catch (err) {
       console.error('Error al procesar el archivo o la API:', err);
@@ -59,6 +61,7 @@ export default function Home() {
   const handleReset = () => {
     setIsDashboard(false);
     setPositions([]);
+    setOrders([]);
   };
 
   return (
@@ -71,7 +74,12 @@ export default function Home() {
           onErrorClear={() => setError(null)}
         />
       ) : (
-        <Dashboard positions={positions} arsToUsdRate={arsToUsdRate} onReset={handleReset} />
+        <Dashboard
+          positions={positions}
+          orders={orders}
+          arsToUsdRate={arsToUsdRate}
+          onReset={handleReset}
+        />
       )}
     </main>
   );
