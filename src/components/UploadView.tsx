@@ -65,9 +65,10 @@ export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: Upl
         {/* Wordmark */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-            Dashboard de Inversiones
+            Tus inversiones en{' '}
+            <span className="text-4xl font-bold text-[#192572] tracking-tight">BALANZ</span>
           </h1>
-          <p className="text-sm text-slate-500 mt-2">Tus inversiones de una manera simple</p>
+          <p className="text-sm text-slate-500 mt-2">De una manera simple</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 flex flex-col gap-7">
@@ -83,7 +84,7 @@ export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: Upl
             </div>
           ) : isLoading ? (
             <div className="flex flex-col items-center justify-center w-full py-12 px-6 border-2 border-slate-100 bg-slate-50 rounded-xl text-center">
-              <Loader2 size={40} className="animate-spin text-emerald-500 mb-4" />
+              <Loader2 size={40} className="animate-spin text-[#192572] mb-4" />
               <p className="text-sm font-semibold text-slate-700">
                 Calculando cotizaciones y armando tu portfolio...
               </p>
@@ -126,7 +127,7 @@ export function UploadView({ onFileSelect, isLoading, error, onErrorClear }: Upl
           )}
         </div>
       </div>
-      
+
       {/* Footer with GitHub Link */}
       <div className="absolute bottom-8 left-0 right-0 flex justify-center">
         <a
