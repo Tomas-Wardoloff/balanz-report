@@ -17,6 +17,7 @@ export interface RawOrder {
 export interface Position {
   ticker: string;
   sector: string;
+  assetType: string;
   quantity: number;
   averagePrice: number; // in USD
   investedValueUSD: number;

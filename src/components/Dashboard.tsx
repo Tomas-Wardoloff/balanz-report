@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { AnimatedCurrency } from '@/components/AnimatedCurrency';
 import { Position, RawOrder } from '@/types';
 import { PortfolioDistribution } from '@/components/charts/PortfolioDistribution';
-import { SectorDistribution } from '@/components/charts/SectorDistribution';
+import { AssetTypeDistribution } from '@/components/charts/AssetTypeDistribution';
 import { PositionsTable } from '@/components/PositionsTable';
 import { KPICard } from '@/components/charts/KPICard';
 import { NavBar } from '@/components/NavBar';
@@ -78,7 +78,7 @@ export function Dashboard({ positions, orders, arsToUsdRate, onReset }: Dashboar
             arsToUsdRate={arsToUsdRate}
             currency={globalCurrency}
           />
-          <SectorDistribution
+          <AssetTypeDistribution
             positions={positions}
             arsToUsdRate={arsToUsdRate}
             currency={globalCurrency}

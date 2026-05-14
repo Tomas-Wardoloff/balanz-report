@@ -1,5 +1,6 @@
 import { RawOrder, Position } from '../types';
 import { SECTOR_MAPPING, UNKNOWN_SECTOR } from '../constants/sectors';
+import { getAssetType } from './assetTypes';
 import { parseOrderDate } from './parser';
 
 export function calculatePositions(orders: RawOrder[], arsToUsdRate: number): Position[] {
@@ -7,7 +8,10 @@ export function calculatePositions(orders: RawOrder[], arsToUsdRate: number): Po
     return parseOrderDate(a.Concertacion).getTime() - parseOrderDate(b.Concertacion).getTime();
   });
 
-  const positionMap = new Map<string, { quantity: number; totalCostUSD: number }>();
+  const positionMap = new Map<
+    string,
+    { quantity: number; totalCostUSD: number; especie: string }
+  >();
 
   for (const order of sortedOrders) {
     const isUSD =
@@ -20,6 +24,7 @@ export function calculatePositions(orders: RawOrder[], arsToUsdRate: number): Po
     const currentPos = positionMap.get(order.Ticker) || {
       quantity: 0,
       totalCostUSD: 0,
+      especie: order.Especie || '',
     };
 
     if (order.Tipo === 'COMPRA') {
@@ -51,6 +56,7 @@ export function calculatePositions(orders: RawOrder[], arsToUsdRate: number): Po
       positions.push({
         ticker,
         sector: SECTOR_MAPPING[ticker] || UNKNOWN_SECTOR,
+        assetType: getAssetType(pos.especie, ticker),
         quantity: pos.quantity,
         averagePrice: avgPrice,
         investedValueUSD: pos.totalCostUSD,
