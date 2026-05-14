@@ -24,7 +24,6 @@ La privacidad del usuario es una prioridad:
 - **Sin Bases de Datos**: Tus datos de inversión sensibles nunca viajan ni son almacenados en ningún servidor externo.
 - **Código Abierto**: Podés auditar todo el código fuente del parseador y los cálculos matemáticos localmente.
 
-
 ## Instalación y Desarrollo Local
 
 Asegúrate de tener instalado [Node.js](https://nodejs.org/) (v18+) y tu gestor de paquetes preferido (`pnpm`, `npm` o `yarn`).
@@ -53,7 +52,7 @@ Asegúrate de tener instalado [Node.js](https://nodejs.org/) (v18+) y tu gestor 
 4. **Abrir en el navegador:**
    Dirígete a [http://localhost:3000](http://localhost:3000) para ver la aplicación en funcionamiento.
 
-## Tecnologías 
+## Tecnologías
 
 - **Core**: Next.js (App Router) + TypeScript.
 - **Estilizado**: Tailwind CSS.
