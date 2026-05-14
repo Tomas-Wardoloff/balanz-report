@@ -1,5 +1,4 @@
 import { RawOrder, Position } from '../types';
-import { SECTOR_MAPPING, UNKNOWN_SECTOR } from '../constants/sectors';
 import { getAssetType } from './assetTypes';
 import { parseOrderDate } from './parser';
 
@@ -55,7 +54,6 @@ export function calculatePositions(orders: RawOrder[], arsToUsdRate: number): Po
       const avgPrice = pos.totalCostUSD / pos.quantity;
       positions.push({
         ticker,
-        sector: SECTOR_MAPPING[ticker] || UNKNOWN_SECTOR,
         assetType: getAssetType(pos.especie, ticker),
         quantity: pos.quantity,
         averagePrice: avgPrice,
