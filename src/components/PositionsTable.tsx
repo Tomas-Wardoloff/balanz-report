@@ -57,9 +57,15 @@ function SortableRow({
     <tr
       ref={setNodeRef}
       style={style}
-      className={`hover:bg-slate-50/70 transition-colors ${!isLast ? 'border-b border-slate-100' : ''} ${isDragging ? 'bg-white shadow-lg' : ''}`}
+      className={`
+        grid grid-cols-2 gap-y-2 p-4 border-b border-slate-300 
+        md:table-row md:bg-transparent md:border-0 md:p-0
+        hover:bg-slate-50/70 transition-colors
+        ${!isLast ? 'md:border-b md:border-slate-100' : ''}
+        ${isDragging ? 'bg-white shadow-lg ring-2 ring-indigo-500/20 z-10 relative' : ''}
+      `}
     >
-      <td className="px-3 py-4 w-10">
+      <td className="col-span-1 order-2 flex justify-end items-center md:table-cell md:order-none md:px-3 md:py-4 md:w-10">
         <button
           {...attributes}
           {...listeners}
@@ -84,43 +90,69 @@ function SortableRow({
           </svg>
         </button>
       </td>
-      <td className="px-6 py-4 text-center font-semibold text-sm text-slate-800 tracking-tight">
+      <td className="col-span-1 order-1 flex items-center font-bold text-base text-slate-800 tracking-tight md:table-cell md:order-none md:px-6 md:py-4 md:text-center md:font-semibold md:text-sm">
         {pos.ticker}
       </td>
-      <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
-        {isPrivate ? '***' : pos.quantity.toLocaleString('es-AR')}
+      <td className="col-span-2 order-3 flex justify-between items-center py-2 border-t border-slate-100 pt-3 mt-1 md:mt-0 md:pt-0 md:border-t-0 md:table-cell md:order-none md:px-6 md:py-4 md:text-center font-mono text-sm text-slate-600">
+        <span className="md:hidden text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Cant. Nominales
+        </span>
+        <span>{isPrivate ? '***' : pos.quantity.toLocaleString('es-AR')}</span>
       </td>
-      <td className="px-6 py-4 text-center font-mono text-sm text-slate-600">
+      <td className="hidden md:table-cell md:px-6 md:py-4 md:text-center font-mono text-sm text-slate-600">
         {pos.currentPriceUSD ? (
           <AnimatedCurrency value={pos.currentPriceUSD * targetMultiplier} currency={currency} />
         ) : (
           '-'
         )}
       </td>
-      <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
+      <td className="hidden md:table-cell md:px-6 md:py-4 md:text-center font-mono text-sm font-semibold text-slate-800">
         <AnimatedCurrency value={pos.investedValueUSD * targetMultiplier} currency={currency} />
       </td>
-      <td className="px-6 py-4 text-center font-mono text-sm font-semibold text-slate-800">
-        {pos.currentValueUSD !== undefined ? (
-          <AnimatedCurrency value={pos.currentValueUSD * targetMultiplier} currency={currency} />
-        ) : (
-          '-'
-        )}
+      <td className="col-span-2 order-4 flex justify-between items-center py-2 border-t border-slate-50 md:border-t-0 md:table-cell md:order-none md:px-6 md:py-4 md:text-center font-mono text-sm font-semibold text-slate-800">
+        <span className="md:hidden text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Valor Actual
+        </span>
+        <span>
+          {pos.currentValueUSD !== undefined ? (
+            <AnimatedCurrency value={pos.currentValueUSD * targetMultiplier} currency={currency} />
+          ) : (
+            '-'
+          )}
+        </span>
       </td>
       <td
-        className={`px-6 py-4 text-center font-mono text-sm font-semibold ${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
+        className={`col-span-2 order-5 flex justify-between items-center py-2 border-t border-slate-50 md:border-t-0 md:table-cell md:order-none md:px-6 md:py-4 md:text-center`}
       >
-        {pos.pnlAbsolute !== undefined ? (
-          <AnimatedCurrency
-            value={pos.pnlAbsolute * targetMultiplier}
-            currency={currency}
-            showSign
-          />
-        ) : (
-          '-'
-        )}
+        <span className="md:hidden text-xs font-semibold uppercase tracking-wider text-slate-400">
+          P&L
+        </span>
+        <div className="flex items-center gap-2 md:inline-block font-mono text-sm font-semibold">
+          <span
+            className={`${pos.pnlAbsolute !== undefined ? (pos.pnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-slate-600'}`}
+          >
+            {pos.pnlAbsolute !== undefined ? (
+              <AnimatedCurrency
+                value={pos.pnlAbsolute * targetMultiplier}
+                currency={currency}
+                showSign
+              />
+            ) : (
+              '-'
+            )}
+          </span>
+          {/* Percentage displayed inline only on mobile */}
+          {pos.pnlPercentage !== undefined && (
+            <span
+              className={`md:hidden inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${pos.pnlPercentage >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}
+            >
+              {pos.pnlPercentage > 0 ? '+' : ''}
+              {pos.pnlPercentage.toFixed(2)}%
+            </span>
+          )}
+        </div>
       </td>
-      <td className="px-6 py-4 text-center">
+      <td className="hidden md:table-cell md:px-6 md:py-4 md:text-center">
         {pos.pnlPercentage !== undefined ? (
           <span
             className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${pos.pnlPercentage >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}
@@ -179,8 +211,8 @@ export function PositionsTable({ positions, arsToUsdRate, currency }: PositionsT
       </div>
       <div>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <table className="w-full text-center border-collapse">
-            <thead>
+          <table className="w-full text-center border-collapse block md:table">
+            <thead className="hidden md:table-header-group">
               <tr className="bg-slate-50 text-slate-400 text-xs uppercase tracking-widest">
                 <th className="px-3 py-3 w-10 border-b border-slate-100"></th>
                 <th className="px-6 py-3 font-semibold border-b border-slate-100 text-center">
@@ -206,7 +238,7 @@ export function PositionsTable({ positions, arsToUsdRate, currency }: PositionsT
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="block md:table-row-group p-4 md:p-0 bg-slate-50/30 md:bg-transparent">
               <SortableContext
                 items={localPositions.map((p) => p.ticker)}
                 strategy={verticalListSortingStrategy}
