@@ -15,8 +15,34 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Balanz Report | Análisis de Cartera',
-  description: 'Visualizá el rendimiento y distribución de tu cartera de inversiones de Balanz.',
+  title: 'Easy Portfolio | Tu cartera de una manera más simple',
+  description:
+    'Análisis detallado, rendimiento y distribución de tu cartera de inversiones de Balanz, Bull Market y Cocos Capital en un solo lugar.',
+  keywords: [
+    'portfolio',
+    'inversiones',
+    'finanzas',
+    'dashboard',
+    'acciones',
+    'cedears',
+    'bonos',
+    'balanz',
+    'bullmarket',
+    'cocos capital',
+  ],
+  authors: [{ name: 'Tomas Wardoloff' }],
+  openGraph: {
+    title: 'Easy Portfolio',
+    description:
+      'Gestión y análisis avanzado de tu cartera de inversiones. Visualiza rendimientos, distribución por activos y evolución histórica.',
+    type: 'website',
+    locale: 'es_AR',
+    siteName: 'Easy Portfolio',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
