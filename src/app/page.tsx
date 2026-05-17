@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { UploadView } from '@/components/UploadView';
+import { UploadView, BrokerType } from '@/components/UploadView';
 import { Dashboard } from '@/components/Dashboard';
-import { parseExcelFile } from '@/utils/parser';
+import { parseBalanz, parseBullMarket, parseCocos } from '@/utils/parser';
 import { calculatePositions } from '@/utils/calculator';
 import { Position, RawOrder } from '@/types';
 import { fetchDolarRate, fetchCurrentPrices } from '@/utils/api';
@@ -16,11 +16,25 @@ export default function Home() {
   const [isDashboard, setIsDashboard] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileSelect = async (file: File) => {
+  const handleFileSelect = async (file: File, broker: BrokerType) => {
     try {
       setIsLoading(true);
 
-      const [orders, fetchedRate] = await Promise.all([parseExcelFile(file), fetchDolarRate()]);
+      let parsePromise: Promise<RawOrder[]>;
+      switch (broker) {
+        case 'cocos':
+          parsePromise = parseCocos(file);
+          break;
+        case 'bullmarket':
+          parsePromise = parseBullMarket(file);
+          break;
+        case 'balanz':
+        default:
+          parsePromise = parseBalanz(file);
+          break;
+      }
+
+      const [orders, fetchedRate] = await Promise.all([parsePromise, fetchDolarRate()]);
 
       setArsToUsdRate(fetchedRate);
       const calculatedPositions = calculatePositions(orders, fetchedRate);

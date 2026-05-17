@@ -1,10 +1,58 @@
 'use client';
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { Upload, Loader2, AlertCircle } from 'lucide-react';
+import { Typewriter } from './animations/TypeWriter';
+import Image from 'next/image';
+
+export type BrokerType = 'balanz' | 'cocos' | 'bullmarket';
+
+interface BrokerConfig {
+  id: BrokerType;
+  name: string;
+  textColorClass: string;
+  logoUrl: string;
+  fontFamily?: string;
+  renderText?: (text: string) => React.ReactNode;
+}
+
+const BROKERS: Record<BrokerType, BrokerConfig> = {
+  balanz: {
+    id: 'balanz',
+    name: 'BALANZ',
+    textColorClass: 'text-[#192572]',
+    logoUrl: '/balanz-logo.png',
+  },
+  cocos: {
+    id: 'cocos',
+    name: 'Cocos Capital',
+    textColorClass: 'text-[#0062e1] font-extrabold',
+    logoUrl: '/cocos-logo.png',
+    fontFamily: 'Fonarto, sans-serif',
+    renderText: (text: string) => {
+      const parts = text.split(' ');
+      if (parts.length === 1) {
+        return <span style={{ color: '#002c65' }}>{parts[0]}</span>;
+      }
+      return (
+        <>
+          <span style={{ color: '#002c65' }}>{parts[0]}</span>{' '}
+          <span style={{ color: '#0062e1' }}>{parts.slice(1).join(' ')}</span>
+        </>
+      );
+    },
+  },
+  bullmarket: {
+    id: 'bullmarket',
+    name: 'Bull Market',
+    textColorClass: 'text-[#1d28f2]',
+    logoUrl: '/bullmarket-logo.png',
+    fontFamily: 'Montserrat, sans-serif',
+  },
+};
 
 interface UploadViewProps {
-  onFileSelect: (file: File) => void;
+  onFileSelect: (file: File, broker: BrokerType) => void;
   isLoading: boolean;
   error?: string | null;
   onError: (msg: string) => void;
@@ -19,7 +67,10 @@ export function UploadView({
   onErrorClear,
 }: UploadViewProps) {
   const [dragActive, setDragActive] = useState(false);
+  const [selectedBroker, setSelectedBroker] = useState<BrokerType>('balanz');
   const [countdown, setCountdown] = useState(4);
+
+  const typewriterWords = useMemo(() => [BROKERS[selectedBroker].name], [selectedBroker]);
 
   useEffect(() => {
     if (!error) return;
@@ -54,20 +105,20 @@ export function UploadView({
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         const file = e.dataTransfer.files[0];
         if (file.name.endsWith('.xlsx')) {
-          onFileSelect(file);
+          onFileSelect(file, selectedBroker);
         } else {
           onError('Por favor sube un archivo .xlsx válido.');
         }
       }
     },
-    [onFileSelect, onError]
+    [onFileSelect, onError, selectedBroker]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.name.endsWith('.xlsx')) {
-        onFileSelect(file);
+        onFileSelect(file, selectedBroker);
       } else {
         onError('Por favor sube un archivo .xlsx válido.');
       }
@@ -75,18 +126,51 @@ export function UploadView({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8">
-      <div className="w-full max-w-md my-auto">
+    <div className="flex flex-col items-center justify-center min-h-screen p-8 relative">
+      {/* GitHub Repo Link - Top Right */}
+      <div className="absolute top-6 right-6 md:top-8 md:right-8">
+        <a
+          href="https://github.com/Tomas-Wardoloff/balanz-report"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-slate-300 hover:text-slate-600 transition-colors duration-200"
+          title="Ver repositorio en GitHub"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+        </a>
+      </div>
+
+      <div className="w-full max-w-xl my-auto flex flex-col items-center">
         {/* Header Wordmark */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 w-full">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
             Tus inversiones de{' '}
-            <span className="text-4xl font-bold text-[#192572] tracking-tight">BALANZ</span>
+            <Typewriter
+              words={typewriterWords}
+              speed={60}
+              pauseDuration={2200}
+              className={`text-4xl font-bold tracking-tight transition-colors duration-300 ${BROKERS[selectedBroker].textColorClass}`}
+              style={{ fontFamily: BROKERS[selectedBroker].fontFamily }}
+              renderText={BROKERS[selectedBroker].renderText}
+            />
           </h1>
           <p className="text-sm text-slate-500 mt-2">De una manera más simple</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 flex flex-col gap-7">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-100 p-8 flex flex-col gap-7">
           {error ? (
             <div className="flex flex-col items-center justify-center w-full py-10 px-6 border-2 border-red-200 bg-slate-50 rounded-xl text-center">
               <div className="p-3 text-red-600 rounded-xl mb-4">
@@ -99,7 +183,7 @@ export function UploadView({
             </div>
           ) : isLoading ? (
             <div className="flex flex-col items-center justify-center w-full py-12 px-6 border-2 border-slate-100 bg-slate-50 rounded-xl text-center">
-              <Loader2 size={40} className="animate-spin text-[#192572] mb-4" />
+              <Loader2 size={40} className="animate-spin text-slate-600 mb-4" />
               <p className="text-sm font-semibold text-slate-700">
                 Calculando cotizaciones y armando tu portfolio...
               </p>
@@ -124,9 +208,7 @@ export function UploadView({
               />
 
               <div className="flex flex-col items-center gap-3 text-center">
-                <div
-                  className={`p-3 rounded-xl transition-colors ${dragActive ? 'text-[#192572]' : 'text-slate-500'}`}
-                >
+                <div className={`p-3 rounded-xl transition-colors text-slate-500`}>
                   <Upload size={24} />
                 </div>
                 <div>
@@ -142,38 +224,49 @@ export function UploadView({
           )}
         </div>
 
-        <p className="mt-6 text-center text-[8px] leading-relaxed text-slate-400 font-normal">
+        <p className="mt-6 text-center text-[8px] leading-relaxed text-slate-400 font-normal max-w-md">
           Esta aplicación es una herramienta independiente de visualización de datos y no se
-          encuentra afiliada, asociada, respaldada ni vinculada formalmente con Balanz Capital S.A.
-          ni con ninguna de sus entidades. Los nombres y marcas comerciales mencionadas pertenecen a
-          sus respectivos titulares.
+          encuentra afiliada, asociada, respaldada ni vinculada formalmente con Balanz Capital S.A.,
+          Cocos Capital S.A., Bull Market Brokers S.A., ni con ninguna de sus entidades. Los nombres
+          y marcas comerciales mencionadas pertenecen a sus respectivos titulares.
         </p>
       </div>
 
-      {/* Footer Disclaimer & Link */}
-      <div className="w-full max-w-md text-center flex flex-col items-center gap-5 pt-8">
-        <a
-          href="https://github.com/Tomas-Wardoloff/balanz-report"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-slate-300 hover:text-slate-700 transition-colors duration-200"
-          title="Ver repositorio en GitHub"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-            <path d="M9 18c-4.51 2-5-2-7-2" />
-          </svg>
-        </a>
+      {/* Footer Broker Selection */}
+      <div className="w-full max-w-xl flex flex-col items-center gap-4 pt-8">
+        <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">
+          Seleccioná tu broker
+        </p>
+        <div className="flex flex-wrap justify-center items-center gap-5">
+          {(Object.keys(BROKERS) as BrokerType[]).map((brokerId) => {
+            const broker = BROKERS[brokerId];
+            const isSelected = selectedBroker === broker.id;
+            return (
+              <button
+                key={broker.id}
+                onClick={() => setSelectedBroker(broker.id)}
+                title={broker.name}
+                className={`cursor-pointer relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl transition-all duration-300 overflow-hidden`}
+              >
+                <div
+                  className={`flex items-center justify-center w-full h-full transition-all duration-300 ${
+                    isSelected
+                      ? 'grayscale-0 opacity-100'
+                      : 'grayscale opacity-40 hover:grayscale-0 hover:opacity-100'
+                  }`}
+                >
+                  <Image
+                    src={broker.logoUrl}
+                    alt={broker.name}
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-contain p-2"
+                  />
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

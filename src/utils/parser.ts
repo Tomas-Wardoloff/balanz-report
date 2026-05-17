@@ -21,7 +21,7 @@ function parseNumber(value: number | string): number {
   return parseFloat(stringVal) || 0;
 }
 
-export async function parseExcelFile(file: File): Promise<RawOrder[]> {
+export async function parseBalanz(file: File): Promise<RawOrder[]> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -70,5 +70,17 @@ export async function parseExcelFile(file: File): Promise<RawOrder[]> {
 
     reader.onerror = (error) => reject(error);
     reader.readAsBinaryString(file);
+  });
+}
+
+export async function parseBullMarket(file: File): Promise<RawOrder[]> {
+  return new Promise((_, reject) => {
+    reject(new Error('El parser para Bull Market aún no está implementado.'));
+  });
+}
+
+export async function parseCocos(file: File): Promise<RawOrder[]> {
+  return new Promise((_, reject) => {
+    reject(new Error('El parser para Cocos Capital aún no está implementado.'));
   });
 }
