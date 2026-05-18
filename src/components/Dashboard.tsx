@@ -1,15 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { AnimatedCurrency } from '@/components/AnimatedCurrency';
 import { Position, RawOrder } from '@/types';
 import { PortfolioDistribution } from '@/components/charts/PortfolioDistribution';
 import { AssetTypeDistribution } from '@/components/charts/AssetTypeDistribution';
 import { PositionsTable } from '@/components/PositionsTable';
-import { KPICard } from '@/components/charts/KPICard';
 import { NavBar } from '@/components/NavBar';
 import { EvolutionChart } from '@/components/charts/EvolutionChart';
 import { PrivacyProvider } from '@/context/PrivacyContext';
+import { KPICardsGrid } from '@/components/KPICardsGrid';
 
 interface DashboardProps {
   positions: Position[];
@@ -39,7 +38,7 @@ export function Dashboard({ positions, orders, arsToUsdRate, onReset }: Dashboar
 
   return (
     <PrivacyProvider>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-8">
+      <div className="max-w-screen-2xl mx-auto px-4 md:px-8 py-8 space-y-8">
         {/* Header */}
         <NavBar
           arsToUsdRate={arsToUsdRate}
@@ -49,26 +48,14 @@ export function Dashboard({ positions, orders, arsToUsdRate, onReset }: Dashboar
         />
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <KPICard
-            title="Total Invertido"
-            value={<AnimatedCurrency value={totalInvested} currency={globalCurrency} />}
-          />
-          <KPICard
-            title="Valor Actual"
-            value={<AnimatedCurrency value={currentTotalValue} currency={globalCurrency} />}
-          />
-          <KPICard
-            title="P&L Latente"
-            value={<AnimatedCurrency value={totalPnlAbsolute} currency={globalCurrency} showSign />}
-            valueColor={totalPnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600'}
-            badge={`${totalPnlPercentage >= 0 ? '+' : ''}${totalPnlPercentage.toFixed(2)}%`}
-            badgeColor={
-              totalPnlAbsolute >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
-            }
-          />
-          <KPICard title="Posiciones Abiertas" value={positions.length.toString()} />
-        </div>
+        <KPICardsGrid
+          positions={positions}
+          globalCurrency={globalCurrency}
+          totalInvested={totalInvested}
+          currentTotalValue={currentTotalValue}
+          totalPnlAbsolute={totalPnlAbsolute}
+          totalPnlPercentage={totalPnlPercentage}
+        />
 
         {/* Charts */}
         <EvolutionChart
