@@ -71,7 +71,12 @@ export function Dashboard({ positions, orders, arsToUsdRate, onReset }: Dashboar
         </div>
 
         {/* Charts */}
-        <EvolutionChart orders={orders} arsToUsdRate={arsToUsdRate} currency={globalCurrency} />
+        <EvolutionChart
+          orders={orders}
+          positions={positions}
+          arsToUsdRate={arsToUsdRate}
+          currency={globalCurrency}
+        />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <PortfolioDistribution
             positions={positions}
