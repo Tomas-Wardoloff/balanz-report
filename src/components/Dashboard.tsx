@@ -59,7 +59,7 @@ export function Dashboard({ positions, orders, arsToUsdRate, onReset }: Dashboar
             value={<AnimatedCurrency value={currentTotalValue} currency={globalCurrency} />}
           />
           <KPICard
-            title="P&L Global"
+            title="P&L Latente"
             value={<AnimatedCurrency value={totalPnlAbsolute} currency={globalCurrency} showSign />}
             valueColor={totalPnlAbsolute >= 0 ? 'text-emerald-600' : 'text-red-600'}
             badge={`${totalPnlPercentage >= 0 ? '+' : ''}${totalPnlPercentage.toFixed(2)}%`}
