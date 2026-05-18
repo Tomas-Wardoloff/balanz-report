@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import { RawOrder } from '@/types';
 import { parseOrderDate } from '@/utils/parser';
+import { usePrivacy } from '@/context/PrivacyContext';
 
 interface EvolutionChartProps {
   orders: RawOrder[];
@@ -35,8 +36,18 @@ function formatDate(date: Date): string {
   return `${d}/${m}/${date.getFullYear()}`;
 }
 
+function formatXAxis(dateStr: string): string {
+  const parts = dateStr.split('/');
+  if (parts.length === 3) {
+    const [, month, year] = parts;
+    return `${month}/${year}`;
+  }
+  return dateStr;
+}
+
 export function EvolutionChart({ orders, arsToUsdRate, currency }: EvolutionChartProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>('ALL');
+  const { isPrivate } = usePrivacy();
 
   const chartData = useMemo(() => {
     if (!orders || orders.length === 0) {
@@ -151,6 +162,7 @@ export function EvolutionChart({ orders, arsToUsdRate, currency }: EvolutionChar
 
   const currencyPrefix = currency === 'USD' ? 'US$ ' : 'AR$ ';
   const formatYAxis = (value: number) => {
+    if (isPrivate) return '***';
     if (value >= 1000000) return `${currencyPrefix}${(value / 1000000).toFixed(1)}M`;
     if (value >= 1000) return `${currencyPrefix}${(value / 1000).toFixed(0)}k`;
     return `${currencyPrefix}${value}`;
@@ -193,6 +205,7 @@ export function EvolutionChart({ orders, arsToUsdRate, currency }: EvolutionChar
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#94a3b8' }}
+              tickFormatter={formatXAxis}
               minTickGap={30}
             />
             <YAxis
@@ -217,13 +230,19 @@ export function EvolutionChart({ orders, arsToUsdRate, currency }: EvolutionChar
                           <span className="text-sm text-slate-500">Total Invertido</span>
                         </div>
                         <span className="text-sm font-bold text-slate-800">
-                          {currencyPrefix}
-                          {Number(payload[0].value).toLocaleString(
-                            currency === 'USD' ? 'en-US' : 'es-AR',
-                            {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 0,
-                            }
+                          {isPrivate ? (
+                            '***'
+                          ) : (
+                            <>
+                              {currencyPrefix}
+                              {Number(payload[0].value).toLocaleString(
+                                currency === 'USD' ? 'en-US' : 'es-AR',
+                                {
+                                  minimumFractionDigits: 0,
+                                  maximumFractionDigits: 0,
+                                }
+                              )}
+                            </>
                           )}
                         </span>
                       </div>
